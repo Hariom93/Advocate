@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom'; 
-import { Phone, Mail, Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom'; 
+import { Phone, Mail, Menu, X, User } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) setIsLoggedIn(true);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
 
   // Routes configuration
   const navLinks = [
@@ -27,9 +41,20 @@ const Navbar = () => {
           </span>
         </div>
         <div className="hidden md:flex gap-4">
-          <button className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-[10px] font-bold transition text-white">
-            ADVOCATE SIGNUP
-          </button>
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login" className="bg-transparent border border-red-600 hover:bg-red-600/10 px-3 py-1 rounded text-[10px] font-bold transition text-white">
+                LOGIN
+              </Link>
+              <Link to="/signup" className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-[10px] font-bold transition text-white">
+                SIGNUP
+              </Link>
+            </>
+          ) : (
+            <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-[10px] font-bold transition text-white">
+              LOGOUT
+            </button>
+          )}
         </div>
       </div>
 
@@ -93,6 +118,17 @@ const Navbar = () => {
                   {link.name}
                 </NavLink>
               ))}
+              
+              {!isLoggedIn ? (
+                <>
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-lg tracking-widest text-white hover:text-red-600">LOGIN</Link>
+                  <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="text-lg tracking-widest text-red-600 hover:text-red-500">SIGNUP</Link>
+                </>
+              ) : (
+                <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="text-lg tracking-widest text-red-600 hover:text-red-500 uppercase">
+                  Logout
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -102,3 +138,9 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+
+

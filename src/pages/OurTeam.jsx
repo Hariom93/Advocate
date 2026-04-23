@@ -1,6 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
-// --- ICONS (SVG Components) - No imports needed! ---
+// --- ICONS (SVG Components) ---
 const LinkedinIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
 );
@@ -45,49 +46,106 @@ const teamMembers = [
 ];
 
 const OurTeam = () => {
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.6, ease: "easeOut" } 
+    }
+  };
+
   return (
-    <div className="bg-zinc-950 min-h-screen pt-24 pb-12">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">
+    <div className="bg-zinc-950 min-h-screen pt-32 pb-20">
+      {/* Header Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-7xl mx-auto px-4 text-center mb-20"
+      >
+        <h3 className="text-red-600 font-bold uppercase text-sm tracking-[0.3em] mb-4">Experts Behind Us</h3>
+        <h1 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter">
           MEET OUR <span className="text-red-600">TEAM</span>
         </h1>
-        <div className="h-1.5 w-20 bg-red-600 mx-auto mt-4 rounded-full"></div>
-      </div>
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: 80 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="h-1.5 bg-red-600 mx-auto mt-6 rounded-full"
+        ></motion.div>
+      </motion.div>
 
-      {/* Grid */}
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Grid Section */}
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
+      >
         {teamMembers.map((member) => (
-          <div key={member.id} className="group bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden transition-all duration-500 hover:border-red-600 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)]">
-            <div className="relative h-80 overflow-hidden">
-              <img 
+          <motion.div 
+            key={member.id} 
+            variants={cardVariants}
+            whileHover={{ y: -10 }}
+            className="group bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden transition-all duration-500 hover:border-red-600/50 hover:shadow-[0_20px_40px_rgba(220,38,38,0.1)]"
+          >
+            {/* Image Container */}
+            <div className="relative h-[380px] overflow-hidden">
+              <motion.img 
                 src={member.image} 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
                 alt={member.name} 
               />
               
-              {/* Overlay with Custom SVG Icons */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
-                <a href="#" className="bg-red-600 p-2.5 rounded-full text-white hover:bg-white hover:text-red-600 transition-all transform hover:-translate-y-1">
-                  <LinkedinIcon />
-                </a>
-                <a href="#" className="bg-red-600 p-2.5 rounded-full text-white hover:bg-white hover:text-red-600 transition-all transform hover:-translate-y-1">
-                  <TwitterIcon />
-                </a>
-                <a href="#" className="bg-red-600 p-2.5 rounded-full text-white hover:bg-white hover:text-red-600 transition-all transform hover:-translate-y-1">
-                  <MailIcon />
-                </a>
-              </div>
+              {/* Social Overlay */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end justify-center pb-8 gap-4"
+              >
+                {[
+                  { Icon: LinkedinIcon, href: "#" },
+                  { Icon: TwitterIcon, href: "#" },
+                  { Icon: MailIcon, href: "#" }
+                ].map((social, idx) => (
+                  <motion.a 
+                    key={idx}
+                    href={social.href}
+                    whileHover={{ scale: 1.2, backgroundColor: "#fff", color: "#dc2626" }}
+                    className="bg-red-600 p-3 rounded-full text-white transition-colors"
+                  >
+                    <social.Icon />
+                  </motion.a>
+                ))}
+              </motion.div>
             </div>
 
-            <div className="p-6 text-center">
-              <h3 className="text-xl font-bold text-white mb-1 uppercase tracking-tight">{member.name}</h3>
-              <p className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">{member.role}</p>
-              <p className="text-zinc-400 text-sm leading-relaxed">{member.bio}</p>
+            {/* Content Section */}
+            <div className="p-8 text-center bg-zinc-900">
+              <h3 className="text-xl font-black text-white mb-1 uppercase tracking-tight group-hover:text-red-600 transition-colors">
+                {member.name}
+              </h3>
+              <p className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                {member.role}
+              </p>
+              <p className="text-zinc-500 text-sm leading-relaxed font-medium">
+                {member.bio}
+              </p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
