@@ -52,8 +52,8 @@ const HeroAndServices = () => {
   ];
 
   const clients = [
-    { name: "Me n Moms", logo: "https://www.advotalks.com/images/1685857826-client-1.png" },
-    { name: "Next Education", logo: "https://www.advotalks.com/images/1685857838-client-2.png" },
+    { name: "Me n Moms", logo: "https://www.medianews4u.com/wp-content/uploads/2021/11/Me-N-Moms-expands-retail-presence-in-6-states-opens-12-new-stores.jpg" },
+    { name: "Next Education", logo: "https://www.edtechreview.in/wp-content/uploads/next-education-launches-two-new-programmes.webp" },
     { name: "L&T Financial", logo: "https://media.assettype.com/freepressjournal/2023-12/2d2f861a-5053-44fe-876a-3fb2cfdf7953/L_T_Finance_Logo.jpg" },
     { name: "BillDesk", logo: "https://static.startuptalky.com/2024/03/BillDesk-Logo-Startuptalky.jpg" },
   ];
